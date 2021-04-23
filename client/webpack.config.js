@@ -6,8 +6,6 @@ const htmlPlugin = new HtmlWebPackPlugin({
 const { VueLoaderPlugin } = require('vue-loader');
 
 module.exports = {
-    // This is the "main" file which should include all other modules
-    entry: './src/main.js',
     devServer: {
         open: true
     },
