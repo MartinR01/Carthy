@@ -7,7 +7,8 @@ const { VueLoaderPlugin } = require('vue-loader');
 
 module.exports = {
     devServer: {
-        open: true
+        open: true,
+        hot: true
     },
     module: {
         rules: [
