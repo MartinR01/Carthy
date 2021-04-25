@@ -31,11 +31,9 @@ html, body {
     grid-template-columns: 2fr 1fr;
 }
 .map {
-    background-color: red;
     grid-column: 1 / 1;
 }
 .gpx {
-    background-color: blue;
     grid-column: 2 / 2;
 }
 </style>
