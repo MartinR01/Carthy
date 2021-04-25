@@ -1,6 +1,7 @@
 <template>
 <div class="point">
     <input type="text" v-model="name"/>
+    <button @click="remove">Delete</button>
 </div>
     
 </template>
@@ -16,6 +17,11 @@ module.exports = {
             set: function(newName){
                 this.$store.commit('rename', {id: this.id, name: newName})
             }
+        }
+    },
+    methods: {
+        remove() {
+            this.$store.commit('remove', {id: this.id});
         }
     }
 }

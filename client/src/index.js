@@ -22,6 +22,9 @@ const store = createStore({
         addnew (state, payload) {
             let id = Date.now();
             state.gpx[id] = {name: ""};
+        },
+        remove (state, payload) {
+            delete state.gpx[payload.id];
         }
     }
 });
