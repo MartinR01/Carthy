@@ -1,6 +1,5 @@
 <template>
 <div class="point">
-    {{ name }}
     <input type="text" v-model="name"/>
 </div>
     

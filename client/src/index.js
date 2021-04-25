@@ -18,6 +18,10 @@ const store = createStore({
     mutations: {
         rename (state, payload) {
             state.gpx[payload.id].name = payload.name;
+        },
+        addnew (state, payload) {
+            let id = Date.now();
+            state.gpx[id] = {name: ""};
         }
     }
 });
