@@ -2,10 +2,6 @@
     <template v-if="npoints">
         Total: {{npoints}} points
 
-        <div v-for="gpx in gpxs" :key="gpx.id">
-            {{gpx.name}}
-        </div>
-
         <template v-for="gpx in gpxs" :key="gpx.id">
             <point :id="gpx.id"></point>
         </template>

@@ -35,5 +35,6 @@ html, body {
 }
 .gpx {
     grid-column: 2 / 2;
+    overflow-y: scroll;
 }
 </style>
