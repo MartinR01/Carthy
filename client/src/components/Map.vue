@@ -48,7 +48,9 @@ export default {
                 // todo delta update map layers
                 this.markers.clearLayers();
                 for (let point of points){
-                    L.marker([point.lat, point.lon]).addTo(this.markers);
+                    L.marker([point.lat, point.lon])
+                        .bindPopup("<h3>"+point.name+"</h3>")
+                        .addTo(this.markers);
                 }
             },
             deep: true  // necessary for array mutations
