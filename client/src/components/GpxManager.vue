@@ -13,8 +13,7 @@
         <h1>Welcome!</h1>
         <p>start by uploading a gpx file or with blank project?</p>
 
-        <input type="file" id="file" accept=".gpx">
-        <button @click="parseFile">Upload file</button>
+        <input type="file" id="file" accept=".gpx" @change="parseFile">
 
         <button @click="addPoint">Blank project</button>
     </template>
