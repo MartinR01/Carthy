@@ -11,6 +11,7 @@
         </template>
 
         <button @click="addPoint">New point</button>
+        <button @click="this.$store.commit('clear')">Clear</button>
     </template>
     <template v-else>
         <h1>Welcome!</h1>

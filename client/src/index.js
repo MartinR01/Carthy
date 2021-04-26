@@ -23,6 +23,9 @@ const store = createStore({
                 state.gpx.findIndex((wpt) => wpt.id === payload.id), 
                 1
             );
+        },
+        clear (state) {
+            state.gpx.splice(0, state.gpx.length);
         }
     },
     actions: {
