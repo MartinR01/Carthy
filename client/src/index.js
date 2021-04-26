@@ -5,26 +5,34 @@ import App from './App.vue'
 const store = createStore({
     state () {
         return {
-            gpx: {
-                id1: {
-                    name: "point1"
-                },
-                id2: {
-                    name: "point2"
-                }
-            }
+            gpx: []
         }
     },
     mutations: {
         rename (state, payload) {
-            state.gpx[payload.id].name = payload.name;
+            state.gpx.find(wpt => wpt.id === payload.id).name = payload.name;
         },
         addnew (state, payload) {
-            let id = Date.now();
-            state.gpx[id] = {name: ""};
+            state.gpx.push({
+                id: payload.id,
+                name: payload.name
+            });
         },
         remove (state, payload) {
-            delete state.gpx[payload.id];
+            state.gpx.splice(
+                state.gpx.findIndex((wpt) => wpt.id === payload.id), 
+                1
+            );
+        }
+    },
+    actions: {
+        add ({commit, state}, payload) {
+            let id = Math.floor(Math.random() * 100000);  // todo generate hash
+            commit('addnew', {
+                id: id,
+                name: payload ? payload.name : ""
+            });
+            
         }
     }
 });

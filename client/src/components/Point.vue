@@ -12,7 +12,7 @@ module.exports = {
     computed: {
         name: {
             get: function(){
-                return this.$store.state.gpx[this.id].name
+                return this.$store.state.gpx.find((wpt) => wpt.id === this.id).name
             },
             set: function(newName){
                 this.$store.commit('rename', {id: this.id, name: newName})
