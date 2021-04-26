@@ -9,12 +9,11 @@ import 'leaflet/dist/leaflet.css';
 export default {
     data() {
         return {
-            center: [51.505, -0.09]
         }
             
     },
     mounted() {
-        let mymap = L.map('map').setView(this.center, 13);
+        let mymap = L.map('map');
         L.tileLayer(
             'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', 
             {
@@ -23,6 +22,7 @@ export default {
         ).addTo(mymap);
         let marker = L.marker([51.5, -0.09]).addTo(mymap);
 
+        mymap.locate({setView: true, enableHighAccuracy: true, maxZoom: 13});
     }
     
 }
