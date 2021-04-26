@@ -12,6 +12,11 @@ const store = createStore({
         rename (state, payload) {
             state.gpx.find(wpt => wpt.id === payload.id).name = payload.name;
         },
+        move (state, payload) {
+            let point = state.gpx.find(wpt => wpt.id === payload.id);
+            point.lat = payload.lat;
+            point.lon = payload.lon;
+        },
         addnew (state, payload) {
             state.gpx.push({
                 id: payload.id,

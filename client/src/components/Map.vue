@@ -40,6 +40,13 @@ export default {
                 lat: event.latlng.lat,
                 lon: event.latlng.lng
             })
+        },
+        moveMarker(event) {
+            this.$store.commit('move', {
+                id: event.target.id,
+                lat: event.target.getLatLng().lat,
+                lon: event.target.getLatLng().lng
+            });
         }
     },
     watch: {
@@ -48,9 +55,13 @@ export default {
                 // todo delta update map layers
                 this.markers.clearLayers();
                 for (let point of points){
-                    L.marker([point.lat, point.lon])
+                    let marker = L.marker([point.lat, point.lon],{
+                            draggable: true
+                        })
+                        .on('dragend', this.moveMarker)
                         .bindPopup("<h3>"+point.name+"</h3>")
                         .addTo(this.markers);
+                    marker.id = point.id;
                 }
             },
             deep: true  // necessary for array mutations
