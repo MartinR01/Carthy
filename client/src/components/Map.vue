@@ -22,7 +22,9 @@ export default {
         ).addTo(mymap);
         let marker = L.marker([51.5, -0.09]).addTo(mymap);
 
-        mymap.locate({setView: true, enableHighAccuracy: true, maxZoom: 13});
+        fetch("https://www.geolocation-db.com/json/")
+            .then(response => response.json())
+            .then(data => mymap.setView([data.latitude, data.longitude], 13));
     }
     
 }
