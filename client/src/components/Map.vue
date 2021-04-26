@@ -9,22 +9,50 @@ import 'leaflet/dist/leaflet.css';
 export default {
     data() {
         return {
+            map: null,
+            markers: null
         }
             
     },
     mounted() {
-        let mymap = L.map('map');
+        this.map = L.map('map');
+        this.markers = L.layerGroup().addTo(this.map);
+
+        fetch("https://www.geolocation-db.com/json/")
+            .then(response => response.json())
+            .then(data => this.map.setView([data.latitude, data.longitude], 13));
+        
+        this.map.on('click', this.addMarker);
         L.tileLayer(
             'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', 
             {
                 attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             }
-        ).addTo(mymap);
-        let marker = L.marker([51.5, -0.09]).addTo(mymap);
+        ).addTo(this.map);
 
-        fetch("https://www.geolocation-db.com/json/")
-            .then(response => response.json())
-            .then(data => mymap.setView([data.latitude, data.longitude], 13));
+
+
+    },
+    methods: {
+        addMarker(event) {
+            this.$store.dispatch('add', {
+                name: "new point",
+                lat: event.latlng.lat,
+                lon: event.latlng.lng
+            })
+        }
+    },
+    watch: {
+        '$store.state.gpx': {
+            handler(points, oldpoints) {
+                // todo delta update map layers
+                this.markers.clearLayers();
+                for (let point of points){
+                    L.marker([point.lat, point.lon]).addTo(this.markers);
+                }
+            },
+            deep: true  // necessary for array mutations
+        }
     }
     
 }

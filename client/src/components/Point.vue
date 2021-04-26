@@ -2,8 +2,7 @@
 <div class="point">
     <input type="text" v-model="name"/>
     <button @click="remove">Delete</button>
-</div>
-    
+</div> 
 </template>
 
 <script>

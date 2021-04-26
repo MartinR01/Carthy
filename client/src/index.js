@@ -15,7 +15,9 @@ const store = createStore({
         addnew (state, payload) {
             state.gpx.push({
                 id: payload.id,
-                name: payload.name
+                name: payload.name,
+                lat: payload.lat,
+                lon: payload.lon
             });
         },
         remove (state, payload) {
@@ -33,7 +35,9 @@ const store = createStore({
             let id = Math.floor(Math.random() * 100000);  // todo generate hash
             commit('addnew', {
                 id: id,
-                name: payload ? payload.name : ""
+                name: payload ? payload.name : "",
+                lat: payload ? payload.lat : 0,
+                lon: payload ? payload.lon : 0
             });
             
         }
