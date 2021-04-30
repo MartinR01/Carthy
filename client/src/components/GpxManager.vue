@@ -44,7 +44,7 @@ export default {
             const parser = new DOMParser();
 
             file.files[0].text().then((str) => {
-                let dom = parser.parseFromString(str, "application/xml");
+                let dom = parser.parseFromString(str, "application/gpx+xml");
                 let wpts = dom.getElementsByTagName("wpt");
 
                 for (const wpt of wpts){  // doesnt work with 'in' ?!
@@ -67,7 +67,7 @@ export default {
             });
             gpx += '</gpx>';
 
-            let blob = new Blob([gpx], {type: "text/plain;charset=utf-8"});
+            let blob = new Blob([gpx], {type: "application/gpx+xml;charset=utf-8"});
             FileSaver.saveAs(blob, "gpxeditor-"+Date.now()+".gpx");
         }
     }
