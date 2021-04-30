@@ -40,22 +40,11 @@ export default {
             this.$store.dispatch('add');
         },
         parseFile() {
-            let file  = document.getElementById("file");
-            const parser = new DOMParser();
+            let filePicker  = document.getElementById("file");
 
-            file.files[0].text().then((str) => {
-                let dom = parser.parseFromString(str, "application/gpx+xml");
-                let wpts = dom.getElementsByTagName("wpt");
-
-                for (const wpt of wpts){  // doesnt work with 'in' ?!
-                    console.log( wpt.getElementsByTagName("name")[0].innerHTML);
-                    this.$store.dispatch('add', {
-                        name: wpt.getElementsByTagName("name")[0].innerHTML,
-                        lat: wpt.getAttribute("lat"),
-                        lon: wpt.getAttribute("lon")
-                    });
-                }
-            });
+            for(let i = 0; i < filePicker.files.length; i++){
+                this.$store.dispatch('parseFile', filePicker.files[i]);
+            }
         },
         exportGpx() {
             const FileSaver = require('file-saver');

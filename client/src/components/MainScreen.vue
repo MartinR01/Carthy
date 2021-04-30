@@ -1,5 +1,5 @@
 <template>
-    <div class="map">
+    <div class="map" @drop.prevent="handleDrop" @dragover.prevent="">
         <Map></Map>
     </div>
     <div class="gpx">
@@ -14,6 +14,15 @@ import Map from './Map.vue'
 export default {
     components: {
         Map, GpxManager
+    },
+    methods: {
+        handleDrop(event) {
+            let items = event.dataTransfer.items;
+
+            for (let i = 0; i < items.length; i++){
+                this.$store.dispatch('parseFile', items[i].getAsFile())
+            }
+        }
     }
 }
 

@@ -2,6 +2,8 @@ import { createApp } from 'vue'
 import { createStore } from 'vuex'
 import App from './App.vue'
 
+const parser = new DOMParser();
+
 const store = createStore({
     state () {
         return {
@@ -44,7 +46,20 @@ const store = createStore({
                 lat: payload ? payload.lat : 0,
                 lon: payload ? payload.lon : 0
             });
-            
+        },
+        parseFile({dispatch}, file) {
+            file.text().then((str) => {
+                let dom = parser.parseFromString(str, "application/xml");
+                let wpts = dom.getElementsByTagName("wpt");
+
+                for (const wpt of wpts){  // doesnt work with 'in' ?!
+                    dispatch('add', {
+                        name: wpt.getElementsByTagName("name")[0].innerHTML,
+                        lat: wpt.getAttribute("lat"),
+                        lon: wpt.getAttribute("lon")
+                    });
+                }
+            });
         }
     }
 });
