@@ -8,6 +8,7 @@
 
         <button @click="addPoint">New point</button>
         <button @click="this.$store.commit('clear')">Clear</button>
+        <button @click="exportGpx">Export</button>
     </template>
     <template v-else>
         <h1>Welcome!</h1>
@@ -55,6 +56,19 @@ export default {
                     });
                 }
             });
+        },
+        exportGpx() {
+            const FileSaver = require('file-saver');
+
+            let gpx = '<?xml version="1.0" encoding="utf-8"?>\n<gpx version="1.1" creator="gpx-editor">\n';
+            this.$store.state.gpx.forEach(point => {
+                // template literals
+                gpx += `\t<wpt lat="${point.lat}" lon="${point.lon}">\n\t\t<name>${point.name}</name>\n\t</wpt>\n`;
+            });
+            gpx += '</gpx>';
+
+            let blob = new Blob([gpx], {type: "text/plain;charset=utf-8"});
+            FileSaver.saveAs(blob, "gpxeditor-"+Date.now()+".gpx");
         }
     }
 }
