@@ -6,7 +6,6 @@
             <point :id="gpx.id"></point>
         </template>
 
-        <button @click="addPoint">New point</button>
         <button @click="this.$store.commit('clear')">Clear</button>
         <button @click="exportGpx">Export</button>
     </template>
