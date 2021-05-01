@@ -1,9 +1,11 @@
 <template>
-    <div class="map" @drop.prevent="handleDrop" @dragover.prevent="">
-        <Map></Map>
-    </div>
-    <div class="gpx">
-        <GpxManager></GpxManager>
+    <div id="mainscreen" @drop.prevent="handleDrop" @dragover.prevent="">
+        <div class="map">
+            <Map></Map>
+        </div>
+        <div class="gpx">
+            <GpxManager></GpxManager>
+        </div>
     </div>
 </template>
 
@@ -35,6 +37,9 @@ html, body {
     margin: 0;
 }
 #app {
+    height: 100%;
+}
+#mainscreen {
     height: 100%;
     display: grid;
     grid-template-columns: 2fr 1fr;
