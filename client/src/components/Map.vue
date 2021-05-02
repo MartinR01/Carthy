@@ -6,13 +6,23 @@
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 
+const icon = new L.Icon.Default();
+const iconActive = L.icon({
+    iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-orange.png',
+    shadowUrl: "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-shadow.png",
+    iconSize: [25, 41],
+	iconAnchor: [12, 41],
+	popupAnchor: [1, -34],
+	shadowSize: [41, 41]
+});
+
 export default {
     data() {
         return {
             map: null,
-            markers: null
+            markers: null,
+            dragging: false  // safeguard to not fire events while dragging that would lead to unintended behavior (redrawing markers etc.)
         }
-            
     },
     mounted() {
         let osmAttr = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
@@ -46,12 +56,26 @@ export default {
                 lon: event.latlng.lng
             })
         },
+        dragStart(event){
+            this.dragging = true;
+        },
         moveMarker(event) {
+            this.dragging = false;
             this.$store.commit('move', {
                 id: event.target.id,
                 lat: event.target.getLatLng().lat,
                 lon: event.target.getLatLng().lng
             });
+        },
+        mouseOver(event) {
+            if(!this.dragging){
+                this.$store.commit('setHl', event.target.id);
+            }
+        },
+        mouseOut(event){
+            if(!this.dragging){
+                this.$store.commit('setHl', null);
+            }
         }
     },
     watch: {
@@ -63,13 +87,30 @@ export default {
                     let marker = L.marker([point.lat, point.lon],{
                             draggable: true
                         })
+                        .on('dragstart', this.dragStart)
                         .on('dragend', this.moveMarker)
+                        .on('mouseover', this.mouseOver)
+                        .on('mouseout', this.mouseOut)
                         .bindPopup("<h3>"+point.name+"</h3>")
                         .addTo(this.markers);
                     marker.id = point.id;
                 }
             },
             deep: true  // necessary for array mutations
+        },
+        '$store.state.highlighted'(id, oldid) {
+            if(oldid){
+                let marker = this.markers.getLayers().find(marker => marker.id === oldid);
+                if(marker){
+                    marker.setIcon(icon);
+                }
+            }
+            if(id){
+                let marker = this.markers.getLayers().find(marker => marker.id === id);
+                if(marker){
+                    marker.setIcon(iconActive);
+                }
+            }
         }
     }
     

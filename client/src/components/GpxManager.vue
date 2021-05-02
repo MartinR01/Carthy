@@ -1,22 +1,24 @@
 <template>
-    <template v-if="npoints">
-        Total: {{npoints}} points
+    <div id="gpx-manager">
+        <template v-if="npoints">
+            Total: {{npoints}} points
 
-        <template v-for="gpx in gpxs" :key="gpx.id">
-            <point :id="gpx.id"></point>
+            <template v-for="gpx in gpxs" :key="gpx.id">
+                <point :id="gpx.id"></point>
+            </template>
+
+            <button @click="clear">Clear</button>
+            <button @click="exportGpx">Export</button>
         </template>
+        <template v-else>
+            <h1>Welcome!</h1>
+            <p>start by uploading a gpx file or with blank project?</p>
 
-        <button @click="this.$store.commit('clear')">Clear</button>
-        <button @click="exportGpx">Export</button>
-    </template>
-    <template v-else>
-        <h1>Welcome!</h1>
-        <p>start by uploading a gpx file or with blank project?</p>
+            <input type="file" id="file" accept=".gpx" @change="parseFile" multiple>
 
-        <input type="file" id="file" accept=".gpx" @change="parseFile" multiple>
-
-        <button @click="addPoint">Blank project</button>
-    </template>
+            <button @click="addPoint">Blank project</button>
+        </template>
+    </div>
 </template>
 
 <script>
@@ -57,7 +59,16 @@ export default {
 
             let blob = new Blob([gpx], {type: "application/gpx+xml;charset=utf-8"});
             FileSaver.saveAs(blob, "gpxeditor-"+Date.now()+".gpx");
+        },
+        clear() {
+            this.$store.commit('clear');
         }
     }
 }
 </script>
+
+<style scoped>
+#gpx-manager{
+    padding: 1em;
+}
+</style>

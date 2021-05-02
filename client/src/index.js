@@ -7,7 +7,8 @@ const parser = new DOMParser();
 const store = createStore({
     state () {
         return {
-            gpx: []
+            gpx: [],
+            highlighted: null
         }
     },
     mutations: {
@@ -35,6 +36,9 @@ const store = createStore({
         },
         clear (state) {
             state.gpx.splice(0, state.gpx.length);
+        },
+        setHl(state, id){
+            state.highlighted = id;
         }
     },
     actions: {
