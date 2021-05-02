@@ -76,14 +76,21 @@ export default {
             if(!this.dragging){
                 this.$store.commit('setHl', null);
             }
+        },
+        getMarker(id){
+            return this.markers.getLayers().find(marker => marker.id === id);
         }
     },
     watch: {
         '$store.state.gpx': {
-            handler(points, oldpoints) {
-                // todo delta update map layers
-                this.markers.clearLayers();
-                for (let point of points){
+            handler(points) {
+                let newpoints = points.filter(point => !this.getMarker(point.id));
+                let rmpoints = this.markers.getLayers().filter(marker => !points.find(point => point.id === marker.id));
+
+                console.log("adding "+newpoints.length+ " markers");
+                console.log("removing "+rmpoints.length+" markers");
+
+                for (let point of newpoints){
                     let marker = L.marker([point.lat, point.lon],{
                             draggable: true
                         })
@@ -94,6 +101,9 @@ export default {
                         .bindPopup("<h3>"+point.name+"</h3>")
                         .addTo(this.markers);
                     marker.id = point.id;
+                }
+                for (let marker of rmpoints){
+                    this.markers.removeLayer(marker);
                 }
             },
             deep: true  // necessary for array mutations
