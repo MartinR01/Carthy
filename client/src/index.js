@@ -3,6 +3,7 @@ import { createStore } from 'vuex'
 import App from './App.vue'
 
 const parser = new DOMParser();
+let curId = 1;  // starting from 0 caused problems due to its likeness to 'false'
 
 const store = createStore({
     state () {
@@ -43,9 +44,8 @@ const store = createStore({
     },
     actions: {
         add ({commit, state}, payload) {
-            let id = Math.floor(Math.random() * 100000);  // todo generate hash
             commit('addnew', {
-                id: id,
+                id: curId++,
                 name: payload ? payload.name : "",
                 lat: payload ? payload.lat : 0,
                 lon: payload ? payload.lon : 0
