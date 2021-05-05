@@ -2,6 +2,8 @@ import { createApp } from 'vue'
 import { createStore } from 'vuex'
 import App from './App.vue'
 
+require('/src/assets/favicon.png')
+
 const parser = new DOMParser();
 let curId = 1;  // starting from 0 caused problems due to its likeness to 'false'
 
