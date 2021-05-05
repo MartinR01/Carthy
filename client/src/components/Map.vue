@@ -88,6 +88,19 @@ export default {
                 let newpoints = points.filter(point => !this.getMarker(point.id));
                 let rmpoints = this.markers.getLayers().filter(marker => !points.find(point => point.id === marker.id));
 
+                let renamed = points.filter(point => {
+                    let marker = this.getMarker(point.id);
+                    if(!marker) return false;
+
+                    if(marker.getPopup().getContent() !== point.name){
+                        marker.getPopup().setContent(point.name);
+                        return true;
+                    }
+                    return false;
+                })
+
+
+                console.log("renamed " + renamed.length);
                 console.log("adding "+newpoints.length+ " markers");
                 console.log("removing "+rmpoints.length+" markers");
 
@@ -99,7 +112,7 @@ export default {
                         .on('dragend', this.moveMarker)
                         .on('mouseover', this.mouseOver)
                         .on('mouseout', this.mouseOut)
-                        .bindPopup("<h3>"+point.name+"</h3>")
+                        .bindPopup(point.name)
                         .addTo(this.markers);
                     marker.id = point.id;
                 }
