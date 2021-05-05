@@ -33,12 +33,15 @@ export default {
         this.markers = L.layerGroup();
 
         this.map = L.map('map',{
-            layers: [osm, this.markers]
+            layers: [osm, this.markers],
+            minZoom: 2
         });
 
-        fetch("https://www.geolocation-db.com/json/")
-            .then(response => response.json())
-            .then(data => this.map.setView([data.latitude, data.longitude], 13));
+        this.map.locate({
+            setView: true,
+            maxZoom: 13,
+            enableHighAccuracy: true
+        });
         
         this.map.on('click', this.addMarker);
         
