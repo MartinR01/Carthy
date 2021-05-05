@@ -27,14 +27,16 @@ export default {
     },
     mounted() {
         let osmAttr = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
-        let osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {attribution: osmAttr});
-        let osmcycle = L.tileLayer('https://{s}.tile-cyclosm.openstreetmap.fr/cyclosm/{z}/{x}/{y}.png', {attribution: osmAttr});
+        let osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {attribution: osmAttr, noWrap: true});
+        let osmcycle = L.tileLayer('https://{s}.tile-cyclosm.openstreetmap.fr/cyclosm/{z}/{x}/{y}.png', {attribution: osmAttr, noWrap: true});
 
         this.markers = L.layerGroup();
 
         this.map = L.map('map',{
             layers: [osm, this.markers],
-            minZoom: 2
+            minZoom: 3,
+            maxBoundsViscosity: 0.8,
+            maxBounds: [[-180, 180], [180, -180]]
         });
 
         this.map.locate({
