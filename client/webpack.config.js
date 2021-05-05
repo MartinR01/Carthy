@@ -4,8 +4,12 @@ const htmlPlugin = new HtmlWebPackPlugin({
     filename: './index.html'
 });
 const { VueLoaderPlugin } = require('vue-loader');
+const path = require('path');
 
 module.exports = {
+    output: {
+        path: path.resolve(__dirname, "../server/public")
+    },
     devServer: {
         open: true,
         hot: true
