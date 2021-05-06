@@ -2,8 +2,9 @@
     <div id="mainscreen" @drop.prevent="handleDrop" @dragover.prevent="">
         <div class="map">
             <Map></Map>
+            <button id="toggleButton" @click="toggleSidebar">{{ sidebarActive ? '>' : '<' }}</button>
         </div>
-        <div class="gpx">
+        <div class="gpx" :style="{ display: sidebarActive ? 'block' : 'none'}">
             <GpxManager></GpxManager>
         </div>
     </div>
@@ -17,6 +18,11 @@ export default {
     components: {
         Map, GpxManager
     },
+    data() {
+        return {
+            sidebarActive: true
+        }
+    },
     methods: {
         handleDrop(event) {
             let items = event.dataTransfer.items;
@@ -24,6 +30,9 @@ export default {
             for (let i = 0; i < items.length; i++){
                 this.$store.dispatch('parseFile', items[i].getAsFile())
             }
+        },
+        toggleSidebar(){
+            this.sidebarActive = !this.sidebarActive;
         }
     }
 }
@@ -41,14 +50,22 @@ html, body {
 }
 #mainscreen {
     height: 100%;
-    display: grid;
-    grid-template-columns: 2fr 1fr;
+    display: flex;
+    align-items: stretch;
 }
 .map {
-    grid-column: 1 / 1;
+    position: relative;
+    width: 75%;
+    flex-grow: 1;
 }
 .gpx {
-    grid-column: 2 / 2;
+    width: 25%;
     overflow-y: scroll;
+}
+#toggleButton {
+    position: absolute;
+    right: 0px;
+    top: 50%;
+    z-index: 1000;
 }
 </style>

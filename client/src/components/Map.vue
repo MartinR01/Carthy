@@ -1,5 +1,5 @@
 <template>
-<div id="map"></div>
+<div id="map" ref="map"></div>
 </template>
 
 <script>
@@ -53,6 +53,11 @@ export default {
         }
 
         L.control.layers(baseLayers).addTo(this.map);
+
+        const resizeObserver = new ResizeObserver(entries => {
+            this.map.invalidateSize({pan: false});
+        });
+        resizeObserver.observe(this.$refs.map);
     },
     methods: {
         addMarker(event) {
