@@ -53,6 +53,7 @@ export default {
         }
 
         L.control.layers(baseLayers).addTo(this.map);
+        L.control.scale().addTo(this.map);
 
         const resizeObserver = new ResizeObserver(entries => {
             this.map.invalidateSize({pan: false});
