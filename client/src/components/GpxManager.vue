@@ -3,9 +3,7 @@
         <template v-if="npoints">
             Total: {{npoints}} points
 
-            <template v-for="gpx in gpxs" :key="gpx.id">
-                <point :id="gpx.id"></point>
-            </template>
+            <point v-for="gpx in gpxs" :key="gpx.id" :id="gpx.id"></point>
 
             <button @click="clear">Clear</button>
             <button @click="exportGpx">Export</button>
