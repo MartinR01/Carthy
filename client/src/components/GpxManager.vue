@@ -12,11 +12,9 @@
         </template>
         <template v-else>
             <h1>Welcome!</h1>
-            <p>start by uploading a gpx file or with blank project?</p>
+            <p>start by uploading a gpx file or simply by clicking on the map!</p>
 
             <input type="file" id="file" accept=".gpx" @change="parseFile" multiple>
-
-            <button @click="addPoint">Blank project</button>
         </template>
     </div>
 </template>
