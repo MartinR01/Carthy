@@ -2,6 +2,7 @@ The aim of this project is to create a web application that allows making and ed
 
 # Links
 - [Midcourse screencast 8/5/21](https://odysee.com/@Martin:6/midcourse-screencast:8)
+	- [Backup link](https://vimeo.com/546964159)
 - [Heroku instance](https://gpx-editor.herokuapp.com/)
 
 # Functionality
