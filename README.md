@@ -1,22 +1,23 @@
 The aim of this project is to create a web application that allows making and editing GPX files. As this file format sees heavy use in trip planning and various competetive sports (e.g. orienteering), it is often necessary to see the same coordinates with many different map layers.
 
-# Core functionality
-- view the map with the ability to switch layers
-- create / edit GPX file - including coordinates and any optional fields
-- export data to a file (i.e. download the edited file)
-- share work via *shortened* link
+# Links
+- [Midcourse screencast 8/5/21](https://odysee.com/@Martin:6/midcourse-screencast:8)
+- [Heroku instance](https://gpx-editor.herokuapp.com/)
 
-## Additional functionality
-Depending on the remaining time, **some** of these might make it to the final verion.
-
-- support for different tilesets (the MVP will only use OSM as its source)
-- collaborative tools and user accounts
-- PWA support to allow limited offline functionality
+# Functionality
+- [x] view the map with the ability to switch layers
+- [x] export data to a file (i.e. download the edited file)
+- [x] wpt support
+- [ ] track support
+- [ ] improve GUI to handle track editing
+- [ ] additional gpx datafields support (elevation,..)
+- [ ] share work via *shortened* link
+- [ ] user accounts to save work
 
 # Technical specification
 The project uses **MEVN** technology stack.
 
-- FE: Vue.js
+- FE: Vue.js + Vuex
 - BE: Express.js
 - DB: MongoDB
 - other:
