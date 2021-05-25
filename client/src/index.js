@@ -2,10 +2,23 @@ import { createApp } from 'vue'
 import { createStore } from 'vuex'
 import App from './App.vue'
 import ReconnectingWebSocket from 'reconnecting-websocket';
+const Connection = require('sharedb/lib/client').Connection
 
-let connection = new ReconnectingWebSocket("ws://localhost:3000");
+let socket = new ReconnectingWebSocket("ws://localhost:3000");
+let connection = new Connection(socket);
 
-connection.on
+let doc = connection.get('collection', 'id');
+
+doc.subscribe((error) => {
+    if (error) return console.error(error)
+    
+    console.log(doc.data.gpx)
+})
+
+doc.on('op', (op) => {
+    console.log('update ', doc.data.gpx);
+})
+
 require('/src/assets/favicon.png')
 
 const parser = new DOMParser();
@@ -34,6 +47,7 @@ const store = createStore({
                 lat: payload.lat,
                 lon: payload.lon
             });
+            doc.submitOp([{p: ['gpx', 0], li: {name: payload.name, lat: payload.lat}}]);
         },
         remove (state, payload) {
             state.gpx.splice(
