@@ -1,7 +1,11 @@
 import { createApp } from 'vue'
 import { createStore } from 'vuex'
 import App from './App.vue'
+import ReconnectingWebSocket from 'reconnecting-websocket';
 
+let connection = new ReconnectingWebSocket("ws://localhost:3000");
+
+connection.on
 require('/src/assets/favicon.png')
 
 const parser = new DOMParser();
