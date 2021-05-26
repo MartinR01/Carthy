@@ -7,7 +7,7 @@
 
             <button @click="clear">Clear</button>
             <button @click="exportGpx">Export</button>
-            <button @click="collab">Collaborate</button>
+            <button @click="collab" :disabled="collabActive">Collaborate</button>
         </template>
         <template v-else>
             <h1>Welcome!</h1>
@@ -16,7 +16,7 @@
             <input type="file" id="file" accept=".gpx" @change="parseFile" multiple>
 
             <input type="text" id="docId"/>
-            <button @click="join">Join</button>
+            <button @click="join" :disabled="collabActive">Join</button>
         </template>
     </div>
 </template>
@@ -35,6 +35,9 @@ export default {
         },
         npoints() {
             return Object.keys(this.gpxs).length
+        },
+        collabActive() {
+            return this.$store.state.collabActive
         }
     },
     methods: {

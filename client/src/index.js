@@ -14,9 +14,11 @@ function setupDoc(id){
 
 function createDoc(){
     setupDoc('id');
-
+    
     doc.create({gpx: []});
-    doc.subscribe();
+    doc.subscribe(() => {
+        store.commit('toggleCollab');
+    });
     doc.on('op', (op) => {
         console.log('update ', doc.data.gpx);
     })
@@ -26,7 +28,8 @@ function joinDoc(id){
     setupDoc(id);
     
     doc.subscribe(() => {
-        console.log('loaded', doc.data.gpx)
+        console.log('loaded', doc.data.gpx);
+        store.commit('toggleCollab');
     });
     doc.on('op', (op) => {
         console.log('update ', doc.data.gpx);
@@ -46,7 +49,8 @@ const store = createStore({
     state () {
         return {
             gpx: [],
-            highlighted: null
+            highlighted: null,
+            collabActive: false
         }
     },
     mutations: {
@@ -80,6 +84,9 @@ const store = createStore({
         },
         setHl(state, id){
             state.highlighted = id;
+        },
+        toggleCollab(state) {
+            state.collabActive = !state.collabActive;
         }
     },
     actions: {
