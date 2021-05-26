@@ -42,9 +42,12 @@ function createDoc(){
     doc.subscribe(() => {
         store.commit('setDocID', id);
     });
-    doc.on('op', (op) => {
-        console.log(op)
-        store.commit('applyOperation', op)
+    doc.on('op', (op, source) => {
+        console.log("op", op)
+        console.log('src', source)
+        if (!source){
+            store.commit('applyOperation', op)
+        }
         console.log('update ', doc.data.gpx);
     })
 }
@@ -60,9 +63,13 @@ function joinDoc(id){
             store.commit('addnew', point);
         }
     });
-    doc.on('op', (op) => {
+    doc.on('op', (op, source) => {
+        console.log("op", op)
+        console.log('src', source)
         console.log('update ', doc.data.gpx);
-        store.commit('applyOperation', op)
+        if (!source){
+            store.commit('applyOperation', op)
+        }
     })
 }
 
@@ -136,10 +143,9 @@ const store = createStore({
                 lat: payload ? payload.lat : 0,
                 lon: payload ? payload.lon : 0
             };
+            commit('addnew', point);
             if (doc){
                 doc.submitOp([{p: ['gpx', doc.data.gpx.length], li: point}]);
-            } else {
-                commit('addnew', point);
             }
         },
         parseFile({dispatch}, file) {
