@@ -7,18 +7,23 @@
 
             <button @click="clear">Clear</button>
             <button @click="exportGpx">Export</button>
+            <button @click="collab">Collaborate</button>
         </template>
         <template v-else>
             <h1>Welcome!</h1>
             <p>start by uploading a gpx file or simply by clicking on the map!</p>
 
             <input type="file" id="file" accept=".gpx" @change="parseFile" multiple>
+
+            <input type="text" id="docId"/>
+            <button @click="join">Join</button>
         </template>
     </div>
 </template>
 
 <script>
 import Point from './Point.vue'
+import {createDoc} from '../index'
 
 export default {
     components: {
@@ -58,6 +63,12 @@ export default {
         },
         clear() {
             this.$store.commit('clear');
+        },
+        collab() {
+            createDoc();
+        },
+        join() {
+
         }
     }
 }

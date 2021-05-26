@@ -9,11 +9,13 @@ let connection = new Connection(socket);
 
 let doc = connection.get('collection', 'id');
 
-doc.subscribe((error) => {
-    if (error) return console.error(error)
-    
-    console.log(doc.data.gpx)
-})
+
+function createDoc(){
+    doc.create({gpx: []});
+}
+
+export {createDoc}
+doc.subscribe();
 
 doc.on('op', (op) => {
     console.log('update ', doc.data.gpx);

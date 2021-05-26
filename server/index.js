@@ -12,30 +12,18 @@ const websockServer = new websock.Server({server: server});
 
 
 let backend = new ShareDB();
-let connection = backend.connect();
-let doc = connection.get('collection', 'id');
-doc.fetch((err) => {
-    console.log('fetching', err, doc)
-    if (err) throw err;
-    if (doc.type === null) {
-        doc.create({gpx: []}, startServer);
-    }
+
+websockServer.on('connection', (webSocket) => {
+    console.log('connected');
+    let stream = new sockstream(webSocket);
+    backend.listen(stream);
 })
 
-function startServer() {
-    websockServer.on('connection', (webSocket) => {
-        console.log('connected');
-        let stream = new sockstream(webSocket);
-        backend.listen(stream);
-        console.log('done');
-    })
-    
-    app.use(express.static(__dirname + '/public'));
-    
-    // fallback option for invalid paths
-    app.get(/.*/, (req, res) => {
-        res.sendFile(__dirname + '/public/index.html');
-    })
-    
-    server.listen(port, () => console.log(`listening at port ${port}`));
-}
+app.use(express.static(__dirname + '/public'));
+
+// fallback option for invalid paths
+app.get(/.*/, (req, res) => {
+    res.sendFile(__dirname + '/public/index.html');
+})
+
+server.listen(port, () => console.log(`listening at port ${port}`));
