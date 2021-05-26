@@ -4,22 +4,38 @@ import App from './App.vue'
 import ReconnectingWebSocket from 'reconnecting-websocket';
 const Connection = require('sharedb/lib/client').Connection
 
-let socket = new ReconnectingWebSocket("ws://localhost:3000");
-let connection = new Connection(socket);
+let doc = null;
 
-let doc = connection.get('collection', 'id');
-
-
-function createDoc(){
-    doc.create({gpx: []});
+function setupDoc(id){
+    let socket = new ReconnectingWebSocket("ws://localhost:3000");
+    let connection = new Connection(socket);
+    doc = connection.get('collection', id);
 }
 
-export {createDoc}
-doc.subscribe();
+function createDoc(){
+    setupDoc('id');
 
-doc.on('op', (op) => {
-    console.log('update ', doc.data.gpx);
-})
+    doc.create({gpx: []});
+    doc.subscribe();
+    doc.on('op', (op) => {
+        console.log('update ', doc.data.gpx);
+    })
+}
+
+function joinDoc(id){
+    setupDoc(id);
+    
+    doc.subscribe(() => {
+        console.log('loaded', doc.data.gpx)
+    });
+    doc.on('op', (op) => {
+        console.log('update ', doc.data.gpx);
+    })
+}
+
+export {createDoc, joinDoc}
+
+
 
 require('/src/assets/favicon.png')
 
@@ -49,7 +65,9 @@ const store = createStore({
                 lat: payload.lat,
                 lon: payload.lon
             });
-            doc.submitOp([{p: ['gpx', 0], li: {name: payload.name, lat: payload.lat}}]);
+            if (doc){
+                doc.submitOp([{p: ['gpx', 0], li: {name: payload.name, lat: payload.lat}}]);
+            }
         },
         remove (state, payload) {
             state.gpx.splice(

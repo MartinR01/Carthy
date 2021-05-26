@@ -23,7 +23,7 @@
 
 <script>
 import Point from './Point.vue'
-import {createDoc} from '../index'
+import {createDoc, joinDoc} from '../index'
 
 export default {
     components: {
@@ -68,7 +68,7 @@ export default {
             createDoc();
         },
         join() {
-
+            joinDoc('id');
         }
     }
 }
