@@ -4,9 +4,6 @@ import App from './App.vue'
 import ReconnectingWebSocket from 'reconnecting-websocket';
 const Connection = require('sharedb/lib/client').Connection
 const json0 = require('ot-json0/lib/json0')
-// import json0 from 'ot-json0'
-console.log(json0)
-
 
 String.prototype.hashCode = function() {
     var hash = 0, i, chr;
@@ -88,7 +85,6 @@ export {createDoc, joinDoc, leaveDoc}
 require('/src/assets/favicon.png')
 
 const parser = new DOMParser();
-let curId = 1;  // starting from 0 caused problems due to its likeness to 'false'
 
 const store = createStore({
     state () {
@@ -100,7 +96,13 @@ const store = createStore({
     },
     mutations: {
         rename (state, payload) {
-            state.gpx.find(wpt => wpt.id === payload.id).name = payload.name;
+            let pos = state.gpx.findIndex(wpt => wpt.id === payload.id);
+            if(doc){
+                doc.submitOp([
+                    {p: ['gpx', pos, 'name'], od:state.gpx[pos].name, oi:payload.name}
+                ])
+            }
+            state.gpx[pos].name = payload.name;
         },
         move (state, payload) {
             console.log(payload.lat)
