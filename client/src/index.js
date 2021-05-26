@@ -116,10 +116,11 @@ const store = createStore({
             });
         },
         remove (state, payload) {
-            state.gpx.splice(
-                state.gpx.findIndex((wpt) => wpt.id === payload.id), 
-                1
-            );
+            let pos = state.gpx.findIndex((wpt) => wpt.id === payload.id);
+            if (doc){
+                doc.submitOp([{p: ['gpx', pos], ld: state.gpx[pos]}])
+            }
+            state.gpx.splice(pos, 1);
         },
         clear (state) {
             state.gpx.splice(0, state.gpx.length);
