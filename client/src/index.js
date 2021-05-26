@@ -139,7 +139,7 @@ const store = createStore({
     actions: {
         add ({commit, state}, payload) {
             let point = {
-                id: doc ? doc.data.gpx.length+1 : curId++,
+                id: (new Date().getTime() + payload.lat + payload.lon).toString().hashCode(),
                 name: payload ? payload.name : "",
                 lat: payload ? payload.lat : 0,
                 lon: payload ? payload.lon : 0
