@@ -103,9 +103,16 @@ const store = createStore({
             state.gpx.find(wpt => wpt.id === payload.id).name = payload.name;
         },
         move (state, payload) {
-            let point = state.gpx.find(wpt => wpt.id === payload.id);
-            point.lat = payload.lat;
-            point.lon = payload.lon;
+            console.log(payload.lat)
+            let pos = state.gpx.findIndex(wpt => wpt.id === payload.id);
+            if(doc){
+                doc.submitOp([
+                    {p: ['gpx', pos, 'lat'], od:state.gpx[pos].lat, oi:payload.lat},
+                    {p: ['gpx', pos, 'lon'], od:state.gpx[pos].lon, oi:payload.lon}
+                ])
+            }
+            state.gpx[pos].lat = payload.lat;
+            state.gpx[pos].lon = payload.lon;
         },
         addnew (state, payload) {
             state.gpx.push({

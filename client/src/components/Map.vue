@@ -110,10 +110,23 @@ export default {
                     return false;
                 })
 
+                let moved = points.filter(point => {
+                    let marker = this.getMarker(point.id);
+                    if(!marker) return false;
+                    
+                    let latlng = marker.getLatLng();
+                    if (latlng['lat'] !== point.lat || latlng['lng'] !== point.lon){
+                        marker.setLatLng([point.lat, point.lon])
+                        return true;
+                    }
+                    return false;
+                });
+
 
                 console.log("renamed " + renamed.length);
                 console.log("adding "+newpoints.length+ " markers");
                 console.log("removing "+rmpoints.length+" markers");
+                console.log("moving "+moved.length+" markers");
 
                 for (let point of newpoints){
                     let marker = L.marker([point.lat, point.lon],{
