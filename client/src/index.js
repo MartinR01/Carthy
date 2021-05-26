@@ -36,7 +36,15 @@ function joinDoc(id){
     })
 }
 
-export {createDoc, joinDoc}
+function leaveDoc(){
+    console.log('destroy')
+    doc.destroy(() => {
+        doc = null;
+        store.commit('toggleCollab')
+    });
+}
+
+export {createDoc, joinDoc, leaveDoc}
 
 
 

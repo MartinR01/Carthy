@@ -7,7 +7,12 @@
 
             <button @click="clear">Clear</button>
             <button @click="exportGpx">Export</button>
-            <button @click="collab" :disabled="collabActive">Collaborate</button>
+            <template v-if="collabActive">
+                <button @click="leave">Leave</button>
+            </template>
+            <template v-else>
+                <button @click="collab">Collaborate</button>
+            </template>
         </template>
         <template v-else>
             <h1>Welcome!</h1>
@@ -16,14 +21,19 @@
             <input type="file" id="file" accept=".gpx" @change="parseFile" multiple>
 
             <input type="text" id="docId"/>
-            <button @click="join" :disabled="collabActive">Join</button>
+            <template v-if="collabActive">
+                <button @click="leave">Leave</button>
+            </template>
+            <template v-else>
+                <button @click="join">Join</button>
+            </template>
         </template>
     </div>
 </template>
 
 <script>
 import Point from './Point.vue'
-import {createDoc, joinDoc} from '../index'
+import {createDoc, joinDoc, leaveDoc} from '../index'
 
 export default {
     components: {
@@ -72,6 +82,9 @@ export default {
         },
         join() {
             joinDoc('id');
+        },
+        leave() {
+            leaveDoc();
         }
     }
 }
