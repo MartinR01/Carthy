@@ -4,20 +4,40 @@ import App from './App.vue'
 import ReconnectingWebSocket from 'reconnecting-websocket';
 const Connection = require('sharedb/lib/client').Connection
 
+
+String.prototype.hashCode = function() {
+    var hash = 0, i, chr;
+    if (this.length === 0) return hash;
+    for (i = 0; i < this.length; i++) {
+        chr   = this.charCodeAt(i);
+        hash  = ((hash << 5) - hash) + chr;
+        hash |= 0; // Convert to 32bit integer
+    }
+    return btoa(hash);  // convert to base64
+};
+
 let doc = null;
+
+function generateID(){
+    let time = new Date().getTime();
+    let json = JSON.stringify(store.state.gpx);
+    return (time+json).hashCode();
+}
 
 function setupDoc(id){
     let socket = new ReconnectingWebSocket("ws://localhost:3000");
     let connection = new Connection(socket);
-    doc = connection.get('collection', id);
+    doc = connection.get('gpx', id);
 }
 
 function createDoc(){
-    setupDoc('id');
+    let id = generateID();
+    console.log("id", id)
+    setupDoc(id);
     
     doc.create({gpx: []});
     doc.subscribe(() => {
-        store.commit('toggleCollab');
+        store.commit('setDocID', id);
     });
     doc.on('op', (op) => {
         console.log('update ', doc.data.gpx);
@@ -29,7 +49,7 @@ function joinDoc(id){
     
     doc.subscribe(() => {
         console.log('loaded', doc.data.gpx);
-        store.commit('toggleCollab');
+        store.commit('setDocID', id);
     });
     doc.on('op', (op) => {
         console.log('update ', doc.data.gpx);
@@ -40,7 +60,7 @@ function leaveDoc(){
     console.log('destroy')
     doc.destroy(() => {
         doc = null;
-        store.commit('toggleCollab')
+        store.commit('setDocID', null)
     });
 }
 
@@ -58,7 +78,7 @@ const store = createStore({
         return {
             gpx: [],
             highlighted: null,
-            collabActive: false
+            docID: null
         }
     },
     mutations: {
@@ -93,8 +113,8 @@ const store = createStore({
         setHl(state, id){
             state.highlighted = id;
         },
-        toggleCollab(state) {
-            state.collabActive = !state.collabActive;
+        setDocID(state, id) {
+            state.docID = id;
         }
     },
     actions: {

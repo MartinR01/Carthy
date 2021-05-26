@@ -9,6 +9,7 @@
             <button @click="exportGpx">Export</button>
             <template v-if="collabActive">
                 <button @click="leave">Leave</button>
+                <div>You are in session <b>{{ collabActive }}</b></div>
             </template>
             <template v-else>
                 <button @click="collab">Collaborate</button>
@@ -20,11 +21,12 @@
 
             <input type="file" id="file" accept=".gpx" @change="parseFile" multiple>
 
-            <input type="text" id="docId"/>
             <template v-if="collabActive">
                 <button @click="leave">Leave</button>
+                <div>You are in session <b>{{ collabActive }}</b></div>
             </template>
             <template v-else>
+                <input type="text" id="docId"/>
                 <button @click="join">Join</button>
             </template>
         </template>
@@ -47,7 +49,7 @@ export default {
             return Object.keys(this.gpxs).length
         },
         collabActive() {
-            return this.$store.state.collabActive
+            return this.$store.state.docID
         }
     },
     methods: {
@@ -81,7 +83,9 @@ export default {
             createDoc();
         },
         join() {
-            joinDoc('id');
+            let id  = document.getElementById("docId").value;
+            console.log("picked id: ", id)
+            joinDoc(id);
         },
         leave() {
             leaveDoc();
