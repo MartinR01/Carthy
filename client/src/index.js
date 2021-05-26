@@ -25,7 +25,8 @@ function generateID(){
 }
 
 function setupDoc(id){
-    let socket = new ReconnectingWebSocket("ws://localhost:3000");
+    let host = PRODUCTION ? location.origin.replace(/^http/, 'ws') : "ws://localhost:3000";
+    let socket = new ReconnectingWebSocket(host);
     let connection = new Connection(socket);
     doc = connection.get('gpx', id);
 }

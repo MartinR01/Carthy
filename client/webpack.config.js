@@ -5,6 +5,7 @@ const htmlPlugin = new HtmlWebPackPlugin({
 });
 const { VueLoaderPlugin } = require('vue-loader');
 const path = require('path');
+const webpack = require('webpack')
 
 module.exports = {
     output: {
@@ -48,5 +49,11 @@ module.exports = {
             'vue$': 'vue/dist/vue.esm-bundler.js'
         }
     },
-    plugins: [new VueLoaderPlugin(), htmlPlugin]
+    plugins: [
+        new VueLoaderPlugin(), 
+        htmlPlugin,
+        new webpack.DefinePlugin({
+            PRODUCTION: process.env.NODE_ENV === 'production'
+        })
+    ]
 };
