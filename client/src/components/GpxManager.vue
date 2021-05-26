@@ -9,7 +9,10 @@
             <button @click="exportGpx">Export</button>
             <template v-if="collabActive">
                 <button @click="leave">Leave</button>
-                <div>You are in session <b>{{ collabActive }}</b></div>
+                <div>You are in session 
+                    <input type="text" id="curDocID" readonly :value="collabActive"/>
+                    <button @click="copyLink">Copy</button>
+                </div>
             </template>
             <template v-else>
                 <button @click="collab">Collaborate</button>
@@ -89,6 +92,11 @@ export default {
         },
         leave() {
             leaveDoc();
+        },
+        copyLink() {
+            console.log(document.getElementById("curDocID"));
+            document.getElementById("curDocID").select();
+            document.execCommand("copy");
         }
     }
 }
