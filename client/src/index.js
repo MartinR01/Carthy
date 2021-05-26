@@ -3,6 +3,9 @@ import { createStore } from 'vuex'
 import App from './App.vue'
 import ReconnectingWebSocket from 'reconnecting-websocket';
 const Connection = require('sharedb/lib/client').Connection
+const json0 = require('ot-json0/lib/json0')
+// import json0 from 'ot-json0'
+console.log(json0)
 
 
 String.prototype.hashCode = function() {
@@ -35,11 +38,13 @@ function createDoc(){
     console.log("id", id)
     setupDoc(id);
     
-    doc.create({gpx: []});
+    doc.create({gpx: store.state.gpx});
     doc.subscribe(() => {
         store.commit('setDocID', id);
     });
     doc.on('op', (op) => {
+        console.log(op)
+        store.commit('applyOperation', op)
         console.log('update ', doc.data.gpx);
     })
 }
@@ -50,9 +55,14 @@ function joinDoc(id){
     doc.subscribe(() => {
         console.log('loaded', doc.data.gpx);
         store.commit('setDocID', id);
+        store.commit('clear');
+        for (const point of doc.data.gpx){
+            store.commit('addnew', point);
+        }
     });
     doc.on('op', (op) => {
         console.log('update ', doc.data.gpx);
+        store.commit('applyOperation', op)
     })
 }
 
@@ -97,9 +107,6 @@ const store = createStore({
                 lat: payload.lat,
                 lon: payload.lon
             });
-            if (doc){
-                doc.submitOp([{p: ['gpx', 0], li: {name: payload.name, lat: payload.lat}}]);
-            }
         },
         remove (state, payload) {
             state.gpx.splice(
@@ -115,16 +122,25 @@ const store = createStore({
         },
         setDocID(state, id) {
             state.docID = id;
+        },
+        applyOperation(state, op){
+            console.log("operation ", op)
+            json0.apply(state, op)
         }
     },
     actions: {
         add ({commit, state}, payload) {
-            commit('addnew', {
-                id: curId++,
+            let point = {
+                id: doc ? doc.data.gpx.length+1 : curId++,
                 name: payload ? payload.name : "",
                 lat: payload ? payload.lat : 0,
                 lon: payload ? payload.lon : 0
-            });
+            };
+            if (doc){
+                doc.submitOp([{p: ['gpx', doc.data.gpx.length], li: point}]);
+            } else {
+                commit('addnew', point);
+            }
         },
         parseFile({dispatch}, file) {
             file.text().then((str) => {
