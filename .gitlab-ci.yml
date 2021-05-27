@@ -1,3 +1,5 @@
+image: node:latest
+
 before_script:
     - apt-get update -qy
     - apt-get install -y ruby-dev
@@ -5,7 +7,8 @@ before_script:
 
 production:
     type: deploy
+    image: ruby:latest
     script:
-        - dpl --provider=heroku --app=$HEROKU_APP --api-key=$HEROKU_API_KEY
+        - dpl --provider=heroku --app=$HEROKU_APP--api-key=$HEROKU_API_KEY
     only:
         - master
