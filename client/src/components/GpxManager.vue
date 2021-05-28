@@ -5,7 +5,7 @@
 
             <point v-for="gpx in gpxs" :key="gpx.id" :id="gpx.id"></point>
 
-            <button @click="clear">Clear</button>
+            <button @click="clear" :disabled="collabActive" :title="collabActive ? 'disabled in collab mode' : ''">Clear</button>
             <button @click="exportGpx">Export</button>
             <template v-if="collabActive">
                 <button @click="leave">Leave</button>
