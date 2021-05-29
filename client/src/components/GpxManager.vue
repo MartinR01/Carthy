@@ -9,7 +9,7 @@
             <button @click="exportGpx">Export</button>
             <template v-if="collabActive">
                 <button @click="leave">Leave</button>
-                <div>You are in session 
+                <div>You are in session with {{ nUsers }} users.
                     <input type="text" id="curDocID" readonly :value="collabActive"/>
                     <button @click="copyLink">Copy</button>
                 </div>
@@ -53,6 +53,12 @@ export default {
         },
         collabActive() {
             return this.$store.state.docID
+        },
+        otherUsers() {
+            return this.$store.state.users
+        },
+        nUsers() {
+            return Object.keys(this.otherUsers).length
         }
     },
     methods: {

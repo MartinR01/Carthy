@@ -36,10 +36,20 @@ function setupDoc(id){
     presence.on('receive', (presenceId, payload) => {
         console.log("pres", presenceId);
         console.log("payload", payload);
-        console.log(presence)
+
+        if (!payload) {
+            // create or destroy event
+            store.commit('removeUser', presenceId);
+        }else if (Object.keys(payload).length === 0){
+            store.commit('updateUser', {id: presenceId, value: payload})
+        } else {
+            // add if doesn't exist in a list
+            console.log("other action")
+        }
     });
 
     localPresence = presence.create()
+    localPresence.submit({})
 }
 
 function createDoc(){
@@ -105,7 +115,8 @@ const store = createStore({
         return {
             gpx: [],
             highlighted: null,
-            docID: null
+            docID: null,
+            users: {}
         }
     },
     mutations: {
@@ -157,6 +168,12 @@ const store = createStore({
         applyOperation(state, op){
             console.log("operation ", op)
             json0.apply(state, op)
+        },
+        updateUser(state, {id, value}){
+            state.users[id] = value;
+        },
+        removeUser(state, id){
+            delete state.users[id];
         }
     },
     actions: {
