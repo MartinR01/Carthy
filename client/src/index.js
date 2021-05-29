@@ -17,6 +17,7 @@ String.prototype.hashCode = function() {
 };
 
 let doc = null;
+let localPresence = null;
 
 function generateID(){
     let time = new Date().getTime();
@@ -29,6 +30,16 @@ function setupDoc(id){
     let socket = new ReconnectingWebSocket(host);
     let connection = new Connection(socket);
     doc = connection.get('gpx', id);
+
+    const presence = connection.getPresence('my-channel')
+    presence.subscribe()
+    presence.on('receive', (presenceId, payload) => {
+        console.log("pres", presenceId);
+        console.log("payload", payload);
+        console.log(presence)
+    });
+
+    localPresence = presence.create()
 }
 
 function createDoc(){
@@ -77,6 +88,8 @@ function leaveDoc(){
         doc = null;
         store.commit('setDocID', null)
     });
+    localPresence.presence.destroy();
+    localPresence = null;
 }
 
 export {createDoc, joinDoc, leaveDoc}
@@ -157,6 +170,7 @@ const store = createStore({
             commit('addnew', point);
             if (doc){
                 doc.submitOp([{p: ['gpx', doc.data.gpx.length], li: point}]);
+                localPresence.submit({id: point.id})
             }
         },
         parseFile({dispatch}, file) {

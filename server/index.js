@@ -11,7 +11,9 @@ const server = http.createServer(app);
 const websockServer = new websock.Server({server: server});
 
 
-let backend = new ShareDB();
+let backend = new ShareDB({
+    presence: true
+});
 
 websockServer.on('connection', (webSocket) => {
     console.log('connected');
