@@ -38,13 +38,9 @@ function setupDoc(id){
         console.log("payload", payload);
 
         if (!payload) {
-            // create or destroy event
             store.commit('removeUser', presenceId);
-        }else if (Object.keys(payload).length === 0){
+        } else{
             store.commit('updateUser', {id: presenceId, value: payload})
-        } else {
-            // add if doesn't exist in a list
-            console.log("other action")
         }
     });
 
