@@ -31,7 +31,7 @@ function setupDoc(id){
     let connection = new Connection(socket);
     doc = connection.get('gpx', id);
 
-    const presence = connection.getPresence('my-channel')
+    const presence = connection.getPresence(id)
     presence.subscribe()
     presence.on('receive', (presenceId, payload) => {
         console.log("pres", presenceId);
