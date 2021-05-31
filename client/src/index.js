@@ -98,7 +98,15 @@ function leaveDoc(){
     localPresence = null;
 }
 
-export {createDoc, joinDoc, leaveDoc}
+function startDragging(markerID){
+    localPresence.submit({drag: markerID})
+}
+
+function endDragging(){
+    localPresence.submit({drag: null})
+}
+
+export {createDoc, joinDoc, leaveDoc, startDragging, endDragging}
 
 
 

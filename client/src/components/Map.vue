@@ -5,6 +5,7 @@
 <script>
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
+import {endDragging, startDragging} from '../index'
 require('leaflet/dist/images/marker-shadow.png');  // ensure it is included in webpack build
 
 const icon = new L.Icon.Default();
@@ -69,6 +70,8 @@ export default {
             })
         },
         dragStart(event){
+            console.log(event)
+            startDragging(event.target.id)
             this.dragging = true;
         },
         moveMarker(event) {
@@ -78,6 +81,7 @@ export default {
                 lat: event.target.getLatLng().lat,
                 lon: event.target.getLatLng().lng
             });
+            endDragging()
         },
         mouseOver(event) {
             if(!this.dragging){
@@ -159,6 +163,18 @@ export default {
                     marker.setIcon(iconActive);
                 }
             }
+        },
+        '$store.state.users': {
+            handler(users) {
+                for (let userid in users){
+                    let marker = this.markers.getLayers().find(marker => marker.id === users[userid].drag)
+
+                    if (marker){
+                        marker.dragging.disable()
+                    }
+                }
+            },
+            deep: true
         }
     }
     
