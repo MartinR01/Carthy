@@ -49,7 +49,13 @@ export default {
             enableHighAccuracy: true
         });
         
-        this.map.on('click', this.addMarker);
+        this.map.on('click', (event) => {
+            this.$store.dispatch('add', {
+                name: "new point",
+                lat: event.latlng.lat,
+                lon: event.latlng.lng
+            })
+        });
         
         let baseLayers = {
             "OSM": osm,
@@ -63,19 +69,6 @@ export default {
             this.map.invalidateSize({pan: false});
         });
         resizeObserver.observe(this.$refs.map);
-    },
-    methods: {
-        addMarker(event) {
-            console.log("clicked", event)
-            this.$store.dispatch('add', {
-                name: "new point",
-                lat: event.latlng.lat,
-                lon: event.latlng.lng
-            })
-        },
-        getMarker(id){
-            return this.markers.getLayers().find(marker => marker.id === id);
-        }
     },
     watch: {
         '$store.state.users': {
