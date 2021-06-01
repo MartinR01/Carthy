@@ -11,6 +11,14 @@ const iconActive = L.icon({
 	popupAnchor: [1, -34],
 	shadowSize: [41, 41]
 });
+const iconDisabled = L.icon({
+    iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-grey.png',
+    shadowUrl: "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-shadow.png",
+    iconSize: [25, 41],
+	iconAnchor: [12, 41],
+	popupAnchor: [1, -34],
+	shadowSize: [41, 41]
+});
 
 export default {
     props: ['id', 'markers', "latlon", "name"],
@@ -23,6 +31,9 @@ export default {
     computed: {
         isHighlighted() {
             return this.$store.state.highlighted === this.id
+        },
+        usedBy() {
+            return this.$store.getters.lockedMarkers[this.id]
         }
     },
     watch: {
@@ -36,6 +47,15 @@ export default {
         },
         latlon(val, oldVal) {
             this.marker.setLatLng(val)
+        },
+        usedBy(val, oldVal){
+            if(val){
+                this.marker.dragging.disable()
+                this.marker.setIcon(iconDisabled)
+            } else {
+                this.marker.dragging.enable()
+                this.marker.setIcon(icon)
+            }
         }
     },
     methods: {

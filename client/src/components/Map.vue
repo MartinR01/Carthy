@@ -70,21 +70,6 @@ export default {
         });
         resizeObserver.observe(this.$refs.map);
     },
-    watch: {
-        '$store.state.users': {
-            handler(users) {
-                for (let userid in users){
-                    let marker = this.markers.getLayers().find(marker => marker.id === users[userid].drag)
-
-                    if (marker){
-                        marker.dragging.disable()
-                    }
-                }
-            },
-            deep: true
-        }
-    }
-    
 }
 </script>
 

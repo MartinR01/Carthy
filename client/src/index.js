@@ -127,6 +127,20 @@ const store = createStore({
             users: {}
         }
     },
+    getters: {
+        lockedMarkers(state){
+            let ret = {}
+            state.gpx.forEach(gpx => {
+                ret[gpx.id] = null
+            })
+            Object.keys(state.users).forEach(key => {
+                if(state.users[key].drag){
+                    ret[state.users[key].drag] = key
+                }
+            })
+            return ret
+        }
+    },
     mutations: {
         rename (state, payload) {
             let pos = state.gpx.findIndex(wpt => wpt.id === payload.id);
