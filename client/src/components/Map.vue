@@ -1,29 +1,32 @@
 <template>
-<div id="map" ref="map"></div>
+<div id="map" ref="map">
+    <map-marker v-for="marker in gpxs" :key="marker.id" 
+        :id="marker.id" :markers="markers" :name="marker.name"
+        :latlon="[marker.lat, marker.lon]"></map-marker>
+</div>
 </template>
 
 <script>
 import L from 'leaflet';
+import MapMarker from './MapMarker.vue'
 import 'leaflet/dist/leaflet.css';
-import {endDragging, startDragging} from '../index'
 require('leaflet/dist/images/marker-shadow.png');  // ensure it is included in webpack build
 
-const icon = new L.Icon.Default();
-const iconActive = L.icon({
-    iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-orange.png',
-    shadowUrl: "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-shadow.png",
-    iconSize: [25, 41],
-	iconAnchor: [12, 41],
-	popupAnchor: [1, -34],
-	shadowSize: [41, 41]
-});
 
 export default {
+    components: { 
+        MapMarker 
+    },
     data() {
         return {
             map: null,
             markers: null,
             dragging: false  // safeguard to not fire events while dragging that would lead to unintended behavior (redrawing markers etc.)
+        }
+    },
+    computed: {
+        gpxs() {
+            return this.$store.state.gpx
         }
     },
     mounted() {
@@ -63,107 +66,18 @@ export default {
     },
     methods: {
         addMarker(event) {
+            console.log("clicked", event)
             this.$store.dispatch('add', {
                 name: "new point",
                 lat: event.latlng.lat,
                 lon: event.latlng.lng
             })
         },
-        dragStart(event){
-            console.log(event)
-            startDragging(event.target.id)
-            this.dragging = true;
-        },
-        moveMarker(event) {
-            this.dragging = false;
-            this.$store.commit('move', {
-                id: event.target.id,
-                lat: event.target.getLatLng().lat,
-                lon: event.target.getLatLng().lng
-            });
-            endDragging()
-        },
-        mouseOver(event) {
-            if(!this.dragging){
-                this.$store.commit('setHl', event.target.id);
-            }
-        },
-        mouseOut(event){
-            if(!this.dragging){
-                this.$store.commit('setHl', null);
-            }
-        },
         getMarker(id){
             return this.markers.getLayers().find(marker => marker.id === id);
         }
     },
     watch: {
-        '$store.state.gpx': {
-            handler(points) {
-                let newpoints = points.filter(point => !this.getMarker(point.id));
-                let rmpoints = this.markers.getLayers().filter(marker => !points.find(point => point.id === marker.id));
-
-                let renamed = points.filter(point => {
-                    let marker = this.getMarker(point.id);
-                    if(!marker) return false;
-
-                    if(marker.getPopup().getContent() !== point.name){
-                        marker.getPopup().setContent(point.name);
-                        return true;
-                    }
-                    return false;
-                })
-
-                let moved = points.filter(point => {
-                    let marker = this.getMarker(point.id);
-                    if(!marker) return false;
-                    
-                    let latlng = marker.getLatLng();
-                    if (latlng['lat'] !== point.lat || latlng['lng'] !== point.lon){
-                        marker.setLatLng([point.lat, point.lon])
-                        return true;
-                    }
-                    return false;
-                });
-
-
-                console.log("renamed " + renamed.length);
-                console.log("adding "+newpoints.length+ " markers");
-                console.log("removing "+rmpoints.length+" markers");
-                console.log("moving "+moved.length+" markers");
-
-                for (let point of newpoints){
-                    let marker = L.marker([point.lat, point.lon],{
-                            draggable: true
-                        })
-                        .on('dragstart', this.dragStart)
-                        .on('dragend', this.moveMarker)
-                        .on('mouseover', this.mouseOver)
-                        .on('mouseout', this.mouseOut)
-                        .bindPopup(point.name)
-                        .addTo(this.markers);
-                    marker.id = point.id;
-                }
-                for (let marker of rmpoints){
-                    this.markers.removeLayer(marker);
-                }
-            },
-            deep: true  // necessary for array mutations
-        },
-        '$store.state.highlighted'(id, oldid) {
-            if(oldid){
-                let marker = this.markers.getLayers().find(marker => marker.id === oldid);
-                if(marker){
-                    marker.setIcon(icon);
-                }
-            }
-            if(id){
-                let marker = this.markers.getLayers().find(marker => marker.id === id);
-                if(marker){
-                    marker.setIcon(iconActive);
-                }
-            }
-        },
         '$store.state.users': {
             handler(users) {
                 for (let userid in users){

@@ -99,11 +99,15 @@ function leaveDoc(){
 }
 
 function startDragging(markerID){
-    localPresence.submit({drag: markerID})
+    if(localPresence){
+        localPresence.submit({drag: markerID})
+    }
 }
 
 function endDragging(){
-    localPresence.submit({drag: null})
+    if(localPresence){
+        localPresence.submit({drag: null})
+    }
 }
 
 export {createDoc, joinDoc, leaveDoc, startDragging, endDragging}
