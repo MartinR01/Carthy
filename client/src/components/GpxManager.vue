@@ -1,24 +1,31 @@
 <template>
     <div id="gpx-manager">
         <template v-if="npoints">
+            <div id="header" class="padded">
             Total: {{npoints}} points
+            </div>
             <div id="point-list">
                 <point v-for="gpx in gpxs" :key="gpx.id" :id="gpx.id"></point>
             </div>
-            <button @click="clear" :disabled="collabActive" :title="collabActive ? 'disabled in collab mode' : ''">Clear</button>
-            <button @click="exportGpx">Export</button>
-            <template v-if="collabActive">
-                <button @click="leave">Leave</button>
-                <div>You are in session with {{ nUsers }} users.
-                    <input type="text" id="curDocID" readonly :value="collabActive"/>
-                    <button @click="copyLink">Copy</button>
+            <div id="footer" class="padded">
+                <div class="button-panel">
+                    <button @click="clear" :disabled="collabActive" :title="collabActive ? 'disabled in collab mode' : ''">Clear</button>
+                    <button @click="exportGpx">Export</button>
+
+                    <button @click="leave" v-if="collabActive">Leave</button>
+                    <button @click="collab" v-else >Collaborate</button>
                 </div>
-            </template>
-            <template v-else>
-                <button @click="collab">Collaborate</button>
-            </template>
+
+                <div v-if="collabActive">
+                    You are in session with {{ nUsers }} users.
+                    <div>
+                        <input type="text" id="curDocID" readonly :value="collabActive"/>
+                        <button @click="copyLink">Copy</button>
+                    </div>
+                </div>
+            </div>
         </template>
-        <template v-else>
+        <div v-else class="padded">
             <h1>Welcome!</h1>
             <p>start by uploading a gpx file or simply by clicking on the map!</p>
 
@@ -32,7 +39,7 @@
                 <input type="text" id="docId"/>
                 <button @click="join">Join</button>
             </template>
-        </template>
+        </div>
     </div>
 </template>
 
@@ -110,15 +117,31 @@ export default {
 
 <style scoped>
 #gpx-manager{
-    display: inline-block;
-    /* top | right | bottom | left */
-    padding: 1em 0 1em 1em;
-    height: calc(100% - 2em);
-    width: calc(100% - 1em);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+#header, #footer {
+    box-shadow: 0 0 16px rgba(0, 0, 0, 0.5);
+}
+
+.button-panel {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.button-panel button {
+    height: 2.5em;
+}
+
+.padded {
+    padding: 1em;
 }
 
 #point-list {
-    height: 90%;
+    flex-grow: 1;
     overflow-y: scroll;
 }
 </style>

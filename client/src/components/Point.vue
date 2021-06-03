@@ -73,8 +73,10 @@ export default {
 
 <style scoped>
 .point{
+    max-width: 15em;
     border: 1px dashed black;
     border-radius: 0.5em;
+    margin: 0.5em;
 
     padding: 0.5em;
     /* todo: add to flexbox */

@@ -60,12 +60,18 @@ html, body {
 }
 .gpx {
     width: 25%;
+    max-width: 18em;
     height: 100%;
+    box-shadow: 0 0 16px rgba(0, 0, 0, 0.4);
+    z-index: 900;
 }
 #toggleButton {
+    height: 4em;
+    width: 1.5em;
+    padding: inherit;
     position: absolute;
     right: 0px;
-    top: 50%;
+    top: calc(50% - 2em);
     z-index: 1000;
 }
 </style>
