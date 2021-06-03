@@ -2,9 +2,9 @@
     <div id="gpx-manager">
         <template v-if="npoints">
             Total: {{npoints}} points
-
-            <point v-for="gpx in gpxs" :key="gpx.id" :id="gpx.id"></point>
-
+            <div id="point-list">
+                <point v-for="gpx in gpxs" :key="gpx.id" :id="gpx.id"></point>
+            </div>
             <button @click="clear" :disabled="collabActive" :title="collabActive ? 'disabled in collab mode' : ''">Clear</button>
             <button @click="exportGpx">Export</button>
             <template v-if="collabActive">
@@ -110,6 +110,15 @@ export default {
 
 <style scoped>
 #gpx-manager{
-    padding: 1em;
+    display: inline-block;
+    /* top | right | bottom | left */
+    padding: 1em 0 1em 1em;
+    height: calc(100% - 2em);
+    width: calc(100% - 1em);
+}
+
+#point-list {
+    height: 90%;
+    overflow-y: scroll;
 }
 </style>

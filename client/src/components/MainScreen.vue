@@ -60,7 +60,7 @@ html, body {
 }
 .gpx {
     width: 25%;
-    overflow-y: scroll;
+    height: 100%;
 }
 #toggleButton {
     position: absolute;
