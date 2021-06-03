@@ -1,12 +1,18 @@
 <template>
-<div class="point" @click.self="toggle" :class="{active:isActive}" @mouseover="mouseOver" @mouseout="mouseOut">
+<div class="point" :class="{active:isActive}" @mouseover="mouseOver" @mouseout="mouseOut">
     <template v-if="opened">
-        Edit mode
+        <input type="text" v-model="name"/>
+        <input type="number" step="0.1" v-model="lat"/>
+        <input type="number" step="0.1" v-model="lon"/>
+        <button @click="toggle">Done</button>
     </template>
     <template v-else>
         <input type="text" v-model="name"/>
-        <button @click="remove">Delete</button>
-        <div>{{lat}}, {{lon}}</div>
+
+        <div>
+            <button @click="remove">Delete</button>
+            <button @click="toggle">Edit</button>
+        </div>
     </template>
 </div> 
 </template>
@@ -33,7 +39,7 @@ export default {
                 return this.$store.state.gpx.find((wpt) => wpt.id === this.id).lat
             },
             set: function(newLat){
-                this.$store.commit('rename', {id: this.id, lat: newLat})
+                this.$store.commit('move', {id: this.id, lat: newLat, lon: this.lon})
             }
         },
         lon: {
@@ -41,7 +47,7 @@ export default {
                 return this.$store.state.gpx.find((wpt) => wpt.id === this.id).lon
             },
             set: function(newLon){
-                this.$store.commit('rename', {id: this.id, lon: newLon})
+                this.$store.commit('move', {id: this.id, lat: this.lat, lon: newLon})
             }
         },
         isActive() {
@@ -72,6 +78,9 @@ export default {
 
     padding: 0.5em;
     /* todo: add to flexbox */
+}
+.point input {
+    width: 90%;
 }
 .active{
     background-color: lightsteelblue;
