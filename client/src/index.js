@@ -84,6 +84,7 @@ function leaveDoc(){
     });
     localPresence.presence.destroy();
     localPresence = null;
+    store.commit('leaveDoc')
 }
 
 function startDragging(markerID){
@@ -183,6 +184,10 @@ const store = createStore({
         },
         removeUser(state, id){
             delete state.users[id];
+        },
+        leaveDoc(state){
+            state.docID = null
+            state.users = {}
         }
     },
     actions: {

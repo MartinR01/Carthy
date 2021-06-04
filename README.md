@@ -3,24 +3,20 @@ The aim of this project is to create a web application that allows making and ed
 # Links
 - [Midcourse screencast 8/5/21](https://odysee.com/@Martin:6/midcourse-screencast:8)
 	- [Backup link](https://vimeo.com/546964159)
+- [Final screencast - project 4/6/21](https://vimeo.com/559190258)
+- [Final screencast - code 4/6/21](https://vimeo.com/559190196)
 - [Heroku instance](https://gpx-editor.herokuapp.com/)
 
 # Functionality
 - [x] view the map with the ability to switch layers
 - [x] export data to a file (i.e. download the edited file)
 - [x] wpt support
-- [ ] track support
-- [ ] improve GUI to handle track editing
-- [ ] additional gpx datafields support (elevation,..)
-- [ ] share work via *shortened* link
-- [ ] user accounts to save work
+- [x] real-time collaboration via code
 
 # Technical specification
-The project uses **MEVN** technology stack.
-
 - FE: Vue.js + Vuex
 - BE: Express.js
-- DB: MongoDB
 - other:
 	- map library: [Leaflet.js](https://leafletjs.com/index.html)
 	- primary map source: [OSM](https://www.openstreetmap.org/)
+	- collaborative library: [ShareDB](https://share.github.io/sharedb/)
