@@ -73,8 +73,9 @@ export default {
 
 <style scoped>
 .point{
+    box-shadow: 5px 5px 5px rgba(0,0,0, 0.1);
     max-width: 15em;
-    border: 1px dashed black;
+    border: 1px solid black;
     border-radius: 0.5em;
     margin: 0.5em;
 
