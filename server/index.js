@@ -16,7 +16,6 @@ let backend = new ShareDB({
 });
 
 websockServer.on('connection', (webSocket) => {
-    console.log('connected');
     let stream = new sockstream(webSocket);
     backend.listen(stream);
 })

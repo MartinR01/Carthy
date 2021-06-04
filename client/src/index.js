@@ -34,9 +34,6 @@ function setupDoc(id){
     const presence = connection.getPresence(id)
     presence.subscribe()
     presence.on('receive', (presenceId, payload) => {
-        console.log("pres", presenceId);
-        console.log("payload", payload);
-
         if (!payload) {
             store.commit('removeUser', presenceId);
         } else{
@@ -50,7 +47,6 @@ function setupDoc(id){
 
 function createDoc(){
     let id = generateID();
-    console.log("id", id)
     setupDoc(id);
     
     doc.create({gpx: store.state.gpx});
@@ -58,12 +54,9 @@ function createDoc(){
         store.commit('setDocID', id);
     });
     doc.on('op', (op, source) => {
-        console.log("op", op)
-        console.log('src', source)
         if (!source){
             store.commit('applyOperation', op)
         }
-        console.log('update ', doc.data.gpx);
     })
 }
 
@@ -71,7 +64,6 @@ function joinDoc(id){
     setupDoc(id);
     
     doc.subscribe(() => {
-        console.log('loaded', doc.data.gpx);
         store.commit('setDocID', id);
         store.commit('clear');
         for (const point of doc.data.gpx){
@@ -79,9 +71,6 @@ function joinDoc(id){
         }
     });
     doc.on('op', (op, source) => {
-        console.log("op", op)
-        console.log('src', source)
-        console.log('update ', doc.data.gpx);
         if (!source){
             store.commit('applyOperation', op)
         }
@@ -89,7 +78,6 @@ function joinDoc(id){
 }
 
 function leaveDoc(){
-    console.log('destroy')
     doc.destroy(() => {
         doc = null;
         store.commit('setDocID', null)
@@ -152,7 +140,6 @@ const store = createStore({
             state.gpx[pos].name = payload.name;
         },
         move (state, payload) {
-            console.log(payload.lat)
             let pos = state.gpx.findIndex(wpt => wpt.id === payload.id);
             if(doc){
                 doc.submitOp([
