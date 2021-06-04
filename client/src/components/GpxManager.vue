@@ -1,13 +1,17 @@
 <template>
-    <div id="gpx-manager">
-        <template v-if="npoints">
-            <div id="header" class="padded">
+    <SidebarHeaderFooter v-if="npoints">
+        <template v-slot:header>
+            <div class="padded">
             Total: {{npoints}} points
             </div>
-            <div id="point-list">
-                <point v-for="gpx in gpxs" :key="gpx.id" :id="gpx.id"></point>
-            </div>
-            <div id="footer" class="padded">
+        </template>
+
+        <template v-slot:content>
+            <point v-for="gpx in gpxs" :key="gpx.id" :id="gpx.id"></point>
+        </template>
+
+        <template v-slot:footer>
+            <div class="padded">
                 <div class="button-panel">
                     <button @click="clear" :disabled="collabActive" :title="collabActive ? 'disabled in collab mode' : ''">Clear</button>
                     <button @click="exportGpx">Export</button>
@@ -25,31 +29,33 @@
                 </div>
             </div>
         </template>
-        <div v-else class="padded">
-            <h1>Welcome!</h1>
-            <p>start by uploading a gpx file or simply by clicking on the map!</p>
+    </SidebarHeaderFooter>
+    <div v-else class="padded">
+        <h1>Welcome!</h1>
+        <p>start by uploading a gpx file or simply by clicking on the map!</p>
 
-            <input type="file" id="file" accept=".gpx" @change="parseFile" multiple>
+        <input type="file" id="file" accept=".gpx" @change="parseFile" multiple>
 
-            <template v-if="collabActive">
-                <button @click="leave">Leave</button>
-                <div>You are in session <b>{{ collabActive }}</b></div>
-            </template>
-            <template v-else>
-                <input type="text" id="docId"/>
-                <button @click="join">Join</button>
-            </template>
-        </div>
+        <template v-if="collabActive">
+            <button @click="leave">Leave</button>
+            <div>You are in session <b>{{ collabActive }}</b></div>
+        </template>
+        <template v-else>
+            <input type="text" id="docId"/>
+            <button @click="join">Join</button>
+        </template>
     </div>
 </template>
 
 <script>
 import Point from './Point.vue'
+import SidebarHeaderFooter from './views/SidebarHeaderFooter.vue'
 import {createDoc, joinDoc, leaveDoc} from '../index'
 
 export default {
     components: {
-        Point
+        Point,
+        SidebarHeaderFooter
     },
     computed: {
         gpxs () {
@@ -116,17 +122,6 @@ export default {
 </script>
 
 <style scoped>
-#gpx-manager{
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-}
-
-#header, #footer {
-    z-index: 1;
-    box-shadow: 0 0 16px rgba(0, 0, 0, 0.5);
-}
-
 .button-panel {
     display: flex;
     justify-content: space-between;
@@ -139,10 +134,5 @@ export default {
 
 .padded {
     padding: 1em;
-}
-
-#point-list {
-    flex-grow: 1;
-    overflow-y: scroll;
 }
 </style>
