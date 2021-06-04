@@ -59,6 +59,7 @@ html, body {
     flex-grow: 1;
 }
 .gpx {
+    overflow: hidden;
     width: 25%;
     max-width: 18em;
     height: 100%;
